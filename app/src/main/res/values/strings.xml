@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">uNewsApp</string>
+    <string name="russia">Россия</string>
+    <string name="art">Искусство</string>
+    <string name="sport">Спорт</string>
+    <string name="science">Наука</string>
+    <string name="economics">Экономика</string>
+    <string name="currency_course">Курс валют</string>
+    <string name="stocks_indices">Индексы акций</string>
 </resources>
