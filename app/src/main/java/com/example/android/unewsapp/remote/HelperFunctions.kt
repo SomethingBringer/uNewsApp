@@ -8,8 +8,9 @@ import retrofit2.Response
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher,
-                            apiCall: suspend () -> Response<T>,
+suspend fun <T> safeApiCall(
+    dispatcher: CoroutineDispatcher,
+    apiCall: suspend () -> Response<T>,
 ): Resource<T> {
     return withContext(dispatcher) {
         var resource: Resource<T>
@@ -22,19 +23,12 @@ suspend fun <T> safeApiCall(dispatcher: CoroutineDispatcher,
             }
         } catch (t: Throwable) {
             resource = exceptionDataAsync(t)
-
         }
         resource
     }
 }
 
-fun <T> exceptionDataAsync(t: Throwable): Resource<T> {
-    return Resource(Resource.ERROR, null, exceptionData(t))
-}
-
 fun exceptionData(error: Throwable): ErrorEntity = when {
-
-
     error is SocketTimeoutException ->
         ErrorEntity(ErrorEntity.ERROR_CODE_TIMEOUT)
 
@@ -72,14 +66,14 @@ fun <T> errorData(response: Response<T>): ErrorEntity {
     return errorEntity
 }
 
-fun <T> errorDataAsync(response: Response<T>): Resource<T> {
-    return Resource(Resource.ERROR, null, errorData(response))
-}
+fun <T> exceptionDataAsync(t: Throwable) = Resource.error<T>(null, exceptionData(t))
+fun <T> errorDataAsync(response: Response<T>) = Resource.error<T>(null, errorData(response))
+
 
 fun <T> successData(response: Response<T>): Resource<T> {
     return if (response.code() != 204 && response.body() == null) {
-        Resource(Resource.ERROR, null, ErrorEntity(ErrorEntity.ERROR_CODE_NO_CONTENT))
+        Resource.error(null, ErrorEntity(ErrorEntity.ERROR_CODE_NO_CONTENT))
     } else {
-        Resource(Resource.SUCCESS, response.body(), null)
+        Resource.success(response.body())
     }
 }
