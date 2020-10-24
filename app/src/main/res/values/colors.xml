@@ -3,8 +3,9 @@
     <color name="colorPrimary">#6202EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="divider">#ededed</color>
+    <color name="divider">#d8d8d8</color>
     <color name="light_bg">#ffffff</color>
+    <color name="fragment_bg">#ededed</color>
     <color name="dark_bg">#333333</color>
     <color name="text_color">#262626</color>
     <color name="text_color_grey">#d8d8d8</color>
