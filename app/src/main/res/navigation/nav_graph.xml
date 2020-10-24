@@ -3,11 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainActivity">
+    app:startDestination="@id/newsFeedFragment">
 
     <activity
         android:id="@+id/mainActivity"
         android:name="com.example.android.unewsapp.ui.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/newsFeedFragment"
+        android:name="com.example.android.unewsapp.ui.fragments.NewsFeedFragment"
+        android:label="Новости"
+        tools:layout="@layout/fragment_news_feed" />
 </navigation>
