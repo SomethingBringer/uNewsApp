@@ -2,7 +2,7 @@ package com.example.android.unewsapp.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.android.unewsapp.ui.fragments.NewsFeedViewModel
+import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel
 import com.example.android.unewsapp.utils.viewmodel.ViewModelKey
 import com.example.android.unewsapp.utils.viewmodel.ViewModelProviderFactory
 import dagger.Binds

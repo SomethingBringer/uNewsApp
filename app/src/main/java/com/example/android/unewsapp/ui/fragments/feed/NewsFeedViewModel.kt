@@ -1,4 +1,4 @@
-package com.example.android.unewsapp.ui.fragments
+package com.example.android.unewsapp.ui.fragments.feed
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.unewsapp.models.News
 import com.example.android.unewsapp.remote.ErrorEntity
 import com.example.android.unewsapp.remote.RetrofitApi
-import com.example.android.unewsapp.ui.fragments.NewsFeedViewModel.State.LOADING
-import com.example.android.unewsapp.ui.fragments.NewsFeedViewModel.State.SHOW
+import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.LOADING
+import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.SHOW
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

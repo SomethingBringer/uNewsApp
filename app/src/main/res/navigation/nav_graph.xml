@@ -12,7 +12,25 @@
         tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/newsFeedFragment"
-        android:name="com.example.android.unewsapp.ui.fragments.NewsFeedFragment"
+        android:name="com.example.android.unewsapp.ui.fragments.feed.NewsFeedFragment"
         android:label="Новости"
-        tools:layout="@layout/fragment_news_feed" />
+        tools:layout="@layout/fragment_news_feed" >
+        <action
+            android:id="@+id/action_newsFeedFragment_to_newsDetailsFragment"
+            app:destination="@id/newsDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsDetailsFragment"
+        android:name="com.example.android.unewsapp.ui.fragments.details.NewsDetailsFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_news_details" >
+        <argument
+            android:name="model"
+            app:argType="com.example.android.unewsapp.models.News" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="Новость" />
+
+    </fragment>
 </navigation>
