@@ -17,5 +17,6 @@
         android:id="@+id/navigationView"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/navigation_menu"/>
+        app:menu="@menu/navigation_menu"
+        />
 </androidx.drawerlayout.widget.DrawerLayout>

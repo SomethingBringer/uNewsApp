@@ -66,6 +66,30 @@ class RetrofitApi @Inject constructor(
         return Resource.success(NewsWrapper(list))
     }
 
+
+    suspend fun searchNews(slug: String): Resource<NewsWrapper> {
+//        return responseWrapper {
+//            news.getNews(slug)
+//        }
+        delay(5000);
+        val list = mutableListOf<News>()
+        list.add(News(1,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(2,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(3,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(4,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(11,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(13,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(15,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(16,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(19,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(10,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(100,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(111,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(122,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        list.add(News(133,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
+        return Resource.success(NewsWrapper(list))
+    }
+
     private suspend fun <T> responseWrapper(block: suspend () -> Response<T>): Resource<T> {
         return safeApiCall(Dispatchers.IO, block)
     }
