@@ -2,26 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:title="@string/russia"
+            android:id="@id/converterFragment"
+            android:title="@string/converter"
             />
-        <item
-            android:title="@string/art"
-            />
-        <item
-            android:title="@string/sport"
-            />
-        <item
-            android:title="@string/science"
-            />
-        <item
-            android:title="@string/economics"
-            />
-        <item
-            android:title="@string/currency_course"
-            />
-        <item
-            android:title="@string/stocks_indices"
-            />
-
     </group>
 </menu>

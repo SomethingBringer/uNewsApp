@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_newsFeedFragment_to_newsDetailsFragment"
             app:destination="@id/newsDetailsFragment" />
+        <action
+            android:id="@+id/action_newsFeedFragment_to_converterFragment"
+            app:destination="@id/converterFragment" />
     </fragment>
     <fragment
         android:id="@+id/newsDetailsFragment"
@@ -33,4 +36,9 @@
             android:defaultValue="Новость" />
 
     </fragment>
+    <fragment
+        android:id="@+id/converterFragment"
+        android:name="com.example.android.unewsapp.ConverterFragment"
+        android:label="Конвертер валют"
+        tools:layout="@layout/fragment_converter" />
 </navigation>
