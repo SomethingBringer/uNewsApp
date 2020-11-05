@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_popular"
+        android:title="@string/popular"
+
+        app:showAsAction="always" />
+    <group
+        android:id="@+id/tag_selection_popular"
+        android:checkableBehavior="all">
+        <item
+            android:id="@+id/corona"
+            android:checkable="true"
+            android:title="@string/corona" />
+        <item
+            android:id="@+id/politics"
+            android:checkable="true"
+            android:title="@string/politics" />
+        <item
+            android:id="@+id/health"
+            android:checkable="true"
+            android:title="@string/health" />
+    </group>
+
+    <item
+        android:id="@+id/menu_countries"
+        android:title="@string/countries"
+        app:showAsAction="always" />
+    <group
+        android:id="@+id/tag_selection_countries"
+        android:checkableBehavior="all">
+        <item
+            android:id="@+id/russia"
+            android:checkable="true"
+            android:title="@string/russia"
+           />
+        <item
+            android:id="@+id/usa"
+            android:checkable="true"
+            android:title="@string/usa"
+            />
+    </group>
+
+
+</menu>

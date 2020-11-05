@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single" android:id="@+id/time_selection">
+        <item android:id="@+id/none"
+            android:title="@string/none"
+            />
+        <item android:id="@+id/day"
+            android:title="@string/news_for_the_day"
+            />
+        <item android:id="@+id/week"
+            android:title="@string/news_for_the_week"
+            />
+        <item android:id="@+id/month"
+            android:title="@string/news_for_the_month"
+            />
+    </group>
+</menu>
