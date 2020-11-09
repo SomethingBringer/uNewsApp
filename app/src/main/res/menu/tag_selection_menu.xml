@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_popular"
+        android:id="@+id/menuPopular"
         android:title="@string/popular"
 
         app:showAsAction="always" />
     <group
-        android:id="@+id/tag_selection_popular"
+        android:id="@+id/tagSelectionPopular"
         android:checkableBehavior="all">
         <item
             android:id="@+id/corona"
@@ -25,11 +25,11 @@
     </group>
 
     <item
-        android:id="@+id/menu_countries"
+        android:id="@+id/menuCountries"
         android:title="@string/countries"
         app:showAsAction="always" />
     <group
-        android:id="@+id/tag_selection_countries"
+        android:id="@+id/tagSelectionCountries"
         android:checkableBehavior="all">
         <item
             android:id="@+id/russia"

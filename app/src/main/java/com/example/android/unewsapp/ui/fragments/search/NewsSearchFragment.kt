@@ -54,17 +54,17 @@ class NewsSearchFragment : Fragment() {
             }
         }
 
-        btn_select_time.setOnClickListener {
+        btnSelectTime.setOnClickListener {
             val menu = PopupMenu(context, it)
             menu.inflate(R.menu.time_selection_menu)
             menu.show()
         }
 
-        btn_select_tags.setOnClickListener {
+        btnSelectTags.setOnClickListener {
             val tagMenu = PopupMenu(context, it)
             tagMenu.inflate(R.menu.tag_selection_menu)
-            tagMenu.menu.findItem(R.id.menu_popular).isEnabled = false
-            tagMenu.menu.findItem(R.id.menu_countries).isEnabled = false
+            tagMenu.menu.findItem(R.id.menuPopular).isEnabled = false
+            tagMenu.menu.findItem(R.id.menuCountries).isEnabled = false
             /*
             tagMenu.setOnMenuItemClickListener {
                 it.isChecked = !it.isChecked

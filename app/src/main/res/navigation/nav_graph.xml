@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/newsSearchFragment"
         android:name="com.example.android.unewsapp.ui.fragments.search.NewsSearchFragment"
-        android:label="Filter"
+        android:label="Search"
         tools:layout="@layout/fragment_news_search" >
 
     </fragment>
