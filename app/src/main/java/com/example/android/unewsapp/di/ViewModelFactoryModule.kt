@@ -2,6 +2,7 @@ package com.example.android.unewsapp.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.android.unewsapp.ui.fragments.converter.ConverterViewModel
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel
 import com.example.android.unewsapp.utils.viewmodel.ViewModelKey
 import com.example.android.unewsapp.utils.viewmodel.ViewModelProviderFactory
@@ -20,4 +21,8 @@ abstract class ViewModelFactoryModule {
     @ViewModelKey(NewsFeedViewModel::class)
     abstract fun bindNewsFeedViewModel(viewModel: NewsFeedViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(ConverterViewModel::class)
+    abstract fun bindConverterViewModel(viewModel: ConverterViewModel): ViewModel
 }
