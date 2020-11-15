@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/converterFragment"
-        android:name="com.example.android.unewsapp.ConverterFragment"
+        android:name="com.example.android.unewsapp.ui.fragments.converter.ConverterFragment"
         android:label="Конвертер валют"
         tools:layout="@layout/fragment_converter" />
 </navigation>
