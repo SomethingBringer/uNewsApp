@@ -1,11 +1,10 @@
 package com.example.android.unewsapp.ui.fragments.search
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.Menu.NONE
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
@@ -18,7 +17,9 @@ import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
 import kotlinx.android.synthetic.main.fragment_news_feed.newsRecycler
 import kotlinx.android.synthetic.main.fragment_news_feed.progressBar
 import kotlinx.android.synthetic.main.fragment_news_search.*
+//import sun.security.jgss.GSSUtil.login
 import javax.inject.Inject
+
 
 class NewsSearchFragment : Fragment() {
 
@@ -41,6 +42,7 @@ class NewsSearchFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_news_search, container, false)
     }
 
+    @SuppressLint("ResourceType")
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,8 +65,22 @@ class NewsSearchFragment : Fragment() {
         btnSelectTags.setOnClickListener {
             val tagMenu = PopupMenu(context, it)
             tagMenu.inflate(R.menu.tag_selection_menu)
-            tagMenu.menu.findItem(R.id.menuPopular).isEnabled = false
-            tagMenu.menu.findItem(R.id.menuCountries).isEnabled = false
+            val MENU_ADD = Menu.FIRST;
+            val MENU_LIST = Menu.FIRST + 1;
+
+            fun onPrepareOptionsMenu(menu: Menu) {
+                menu.clear()
+                //menu.add(0, MENU_ADD, NONE, R.string.politics).setCheckable(true)
+                //menu.add(0, MENU_LIST, NONE, R.string.popular).setCheckable(true)
+                return super.onPrepareOptionsMenu(menu)
+            }
+
+            val addstuff = onPrepareOptionsMenu(tagMenu.menu)
+
+
+            //tagMenu.menu.findItem(R.id.menuPopular).isEnabled = false
+            //tagMenu.menu.findItem(R.id.menuCountries).isEnabled = false
+            
             /*
             tagMenu.setOnMenuItemClickListener {
                 it.isChecked = !it.isChecked
@@ -74,6 +90,7 @@ class NewsSearchFragment : Fragment() {
              */
 
             tagMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+
                 item.isChecked = !item.isChecked
 
                 // Do other stuff
@@ -92,8 +109,9 @@ class NewsSearchFragment : Fragment() {
                 })
                 false
             })
-
             tagMenu.show()
+
+
         }
         ivCross.setOnClickListener { etSearch.text.clear() }
         observeLiveData()
