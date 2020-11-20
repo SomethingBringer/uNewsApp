@@ -1,6 +1,5 @@
 package com.example.android.unewsapp.ui
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

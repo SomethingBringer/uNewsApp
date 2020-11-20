@@ -12,10 +12,10 @@
     <string name="news_for_the_week">За последнюю неделю</string>
     <string name="news_for_the_month">За последний месяц</string>
     <string name="none">Без ограничений</string>
-    <string name="usa"> США </string>
-    <string name="corona"> Коронавирус </string>
-    <string name="politics"> Политика </string>
-    <string name="health"> Здоровье </string>
-    <string name="countries"> Страны </string>
-    <string name="popular"> Популярное </string>
+    <string name="usa">США</string>
+    <string name="corona">Коронавирус</string>
+    <string name="politics">Политика</string>
+    <string name="health">Здоровье</string>
+    <string name="countries">Страны</string>
+    <string name="popular">Популярное</string>
 </resources>

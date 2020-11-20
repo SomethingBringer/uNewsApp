@@ -65,17 +65,8 @@ class NewsSearchFragment : Fragment() {
         btnSelectTags.setOnClickListener {
             val tagMenu = PopupMenu(context, it)
             tagMenu.inflate(R.menu.tag_selection_menu)
-            val MENU_ADD = Menu.FIRST;
-            val MENU_LIST = Menu.FIRST + 1;
+            //loadTags(tagMenu.menu)
 
-            fun onPrepareOptionsMenu(menu: Menu) {
-                menu.clear()
-                //menu.add(0, MENU_ADD, NONE, R.string.politics).setCheckable(true)
-                //menu.add(0, MENU_LIST, NONE, R.string.popular).setCheckable(true)
-                return super.onPrepareOptionsMenu(menu)
-            }
-
-            val addstuff = onPrepareOptionsMenu(tagMenu.menu)
 
 
             //tagMenu.menu.findItem(R.id.menuPopular).isEnabled = false
@@ -90,23 +81,7 @@ class NewsSearchFragment : Fragment() {
              */
 
             tagMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-
-                item.isChecked = !item.isChecked
-
-                // Do other stuff
-
-                // Keep the popup menu open
-                item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-                item.actionView = View(context)
-                item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-                    override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                        return false
-                    }
-
-                    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                        return false
-                    }
-                })
+                initTagMenuOnClickListener(item)
                 false
             })
             tagMenu.show()
@@ -160,6 +135,35 @@ class NewsSearchFragment : Fragment() {
 
     private fun setSearchMode() {
         ivCross.visibility = View.VISIBLE
+    }
+
+    private fun initTagMenuOnClickListener(item: MenuItem){
+        item.isChecked = !item.isChecked
+
+        // Do other stuff
+
+        // Keep the popup menu open
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+        item.actionView = View(context)
+        item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                return false
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                return false
+            }
+        })
+    }
+
+    private fun loadTags(menu : Menu){
+        val MENU_ADD = Menu.FIRST;
+        val MENU_LIST = Menu.FIRST + 1;
+
+        //val addstuff = onPrepareOptionsMenu(menu)
+        menu.clear()
+        //menu.add(0, MENU_ADD, NONE, R.string.politics).setCheckable(true)
+        //menu.add(0, MENU_LIST, NONE, R.string.popular).setCheckable(true)
     }
 }
 
