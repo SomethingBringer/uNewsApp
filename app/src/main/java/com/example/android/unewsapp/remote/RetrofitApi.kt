@@ -79,11 +79,10 @@ class RetrofitApi @Inject constructor(
     }
 
 
-    suspend fun searchNews(slug: String): Resource<NewsWrapper> {
+    suspend fun searchNews(slug: String): Resource<ModelWrapper<List<News>>> {
 //        return responseWrapper {
 //            news.getNews(slug)
 //        }
-        delay(5000);
         val list = mutableListOf<News>()
         list.add(News(1,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
         list.add(News(2,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
@@ -99,7 +98,7 @@ class RetrofitApi @Inject constructor(
         list.add(News(111,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
         list.add(News(122,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
         list.add(News(133,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        return Resource.success(NewsWrapper(list))
+        return Resource.success(ModelWrapper(list))
     }
 
     private suspend fun <T> responseWrapper(block: suspend () -> Response<T>): Resource<T> {
