@@ -12,4 +12,9 @@ interface NewsApi {
     suspend fun getNews(
         @Query("slug") slug: String
     ): Response<ModelWrapper<List<News>>>
+
+    @GET("someUrl")
+    suspend fun searchNews(
+        @Query("slug") slug: String
+    ): Response<ModelWrapper<List<News>>>
 }
