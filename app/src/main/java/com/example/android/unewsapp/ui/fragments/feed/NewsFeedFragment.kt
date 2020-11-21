@@ -35,6 +35,7 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_news_feed, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,6 +44,8 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
         observeLiveData()
         tabLayout.addOnTabSelectedListener(this)
         viewModel.getNews(0)
+
+        //findNavController().navigate(R.id.action_newsFeedFragment_to_newsSearchFragment)
     }
 
     private fun initAdapter() {
@@ -90,5 +93,7 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {}
     override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+
 
 }

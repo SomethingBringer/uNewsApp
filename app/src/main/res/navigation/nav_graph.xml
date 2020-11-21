@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_newsFeedFragment_to_newsDetailsFragment"
             app:destination="@id/newsDetailsFragment" />
+        <action
+            android:id="@+id/action_newsFeedFragment_to_newsSearchFragment"
+            app:destination="@id/newsSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/newsDetailsFragment"
@@ -31,6 +34,14 @@
             android:name="title"
             app:argType="string"
             android:defaultValue="Новость" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/newsSearchFragment"
+        android:name="com.example.android.unewsapp.ui.fragments.search.NewsSearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_news_search" >
 
     </fragment>
 </navigation>
