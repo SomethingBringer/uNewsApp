@@ -103,10 +103,12 @@ class NewsSearchFragment : Fragment() {
                 is NewsSearchViewModel.State.SHOW -> {
                     newsRecycler.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
+                    etSearch.isEnabled = true
                 }
                 is NewsSearchViewModel.State.LOADING -> {
                     newsRecycler.visibility = View.GONE
                     progressBar.visibility = View.VISIBLE
+                    etSearch.isEnabled = false
                 }
             }
         }
