@@ -19,6 +19,9 @@
             android:id="@+id/action_newsFeedFragment_to_newsDetailsFragment"
             app:destination="@id/newsDetailsFragment" />
         <action
+            android:id="@+id/action_newsFeedFragment_to_converterFragment"
+            app:destination="@id/converterFragment" />
+        <action
             android:id="@+id/action_newsFeedFragment_to_newsSearchFragment"
             app:destination="@id/newsSearchFragment" />
     </fragment>
@@ -44,4 +47,9 @@
         tools:layout="@layout/fragment_news_search" >
 
     </fragment>
+    <fragment
+        android:id="@+id/converterFragment"
+        android:name="com.example.android.unewsapp.ui.fragments.converter.ConverterFragment"
+        android:label="Конвертер валют"
+        tools:layout="@layout/fragment_converter" />
 </navigation>

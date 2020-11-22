@@ -1,18 +1,17 @@
 package com.example.android.unewsapp.remote
 
 import com.example.android.unewsapp.BuildConfig
-import com.example.android.unewsapp.models.News
-import com.example.android.unewsapp.models.NewsWrapper
+import com.example.android.unewsapp.models.*
+import com.example.android.unewsapp.remote.api.CurrencyApi
 import com.example.android.unewsapp.remote.api.NewsApi
+import com.example.android.unewsapp.utils.KeyStore
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -20,8 +19,10 @@ class RetrofitApi @Inject constructor(
     private val gson:Gson
 ) {
 
-    private val news by lazy {  getRetrofit().create(NewsApi::class.java)}
-    private fun getRetrofit(): Retrofit {
+    private val news by lazy {  getRetrofit("").create(NewsApi::class.java)}
+    private val currency by lazy { getRetrofit("https://currate.ru/").create(CurrencyApi::class.java)}
+
+    private fun getRetrofit(baseUrl: String): Retrofit {
 
         val client = OkHttpClient.Builder()
             .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
@@ -37,17 +38,16 @@ class RetrofitApi @Inject constructor(
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()
     }
 
-    suspend fun getNews(slug: String): Resource<NewsWrapper> {
+    suspend fun getNews(slug: String): Resource<ModelWrapper<List<News>>> {
 //        return responseWrapper {
 //            news.getNews(slug)
 //        }
-        delay(5000);
         val list = mutableListOf<News>()
         list.add(News(1,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
         list.add(News(2,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
@@ -63,15 +63,26 @@ class RetrofitApi @Inject constructor(
         list.add(News(111,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
         list.add(News(122,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
         list.add(News(133,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        return Resource.success(NewsWrapper(list))
+        return Resource.success(ModelWrapper(list))
+    }
+
+    suspend fun getPairs(): Resource<ModelWrapper<List<String>>> {
+        return responseWrapper {
+            currency.getPairs(key=KeyStore.key)
+        }
+    }
+
+    suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String,String>>> {
+        return responseWrapper {
+            currency.getValues(pairs = pairs.joinToString(separator=","), key = KeyStore.key)
+        }
     }
 
 
-    suspend fun searchNews(slug: String): Resource<NewsWrapper> {
+    suspend fun searchNews(slug: String): Resource<ModelWrapper<List<News>>> {
 //        return responseWrapper {
 //            news.getNews(slug)
 //        }
-        delay(5000);
         val list = mutableListOf<News>()
         list.add(News(1,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
         list.add(News(2,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
@@ -87,7 +98,7 @@ class RetrofitApi @Inject constructor(
         list.add(News(111,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
         list.add(News(122,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
         list.add(News(133,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        return Resource.success(NewsWrapper(list))
+        return Resource.success(ModelWrapper(list))
     }
 
     private suspend fun <T> responseWrapper(block: suspend () -> Response<T>): Resource<T> {

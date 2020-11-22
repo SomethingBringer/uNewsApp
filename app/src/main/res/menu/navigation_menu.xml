@@ -5,6 +5,9 @@
             android:id="@id/newsSearchFragment"
             android:title="Search">
         </item>
+        <item
+            android:id="@id/converterFragment"
+            android:title="@string/converter"
+            />
     </group>
-
 </menu>
