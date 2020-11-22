@@ -6,24 +6,27 @@ import com.example.android.unewsapp.models.News
 import com.example.android.unewsapp.models.NewsCount
 import com.example.android.unewsapp.models.NewsWrapper
 import com.example.android.unewsapp.remote.api.NewsApi
+import com.example.android.unewsapp.remote.api.CurrencyApi
+import com.example.android.unewsapp.utils.KeyStore
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class RetrofitApi @Inject constructor(
     private val gson:Gson
 ) {
+
     private val URL = "http://62.113.118.217:8000/"
     private val news by lazy {  getRetrofit().create(NewsApi::class.java)}
-    private fun getRetrofit(): Retrofit {
+    private val currency by lazy { getRetrofit("https://currate.ru/").create(CurrencyApi::class.java)}
+
+    private fun getRetrofit(baseUrl: String): Retrofit {
 
         val client = OkHttpClient.Builder()
             .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
@@ -39,7 +42,7 @@ class RetrofitApi @Inject constructor(
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()
@@ -67,6 +70,18 @@ class RetrofitApi @Inject constructor(
     suspend fun getNewsCount(): Resource<NewsCount>{
         return responseWrapper {
             news.getNewsCount()
+        }
+    }
+
+    suspend fun getPairs(): Resource<ModelWrapper<List<String>>> {
+        return responseWrapper {
+            currency.getPairs(key=KeyStore.key)
+        }
+    }
+
+    suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String,String>>> {
+        return responseWrapper {
+            currency.getValues(pairs = pairs.joinToString(separator=","), key = KeyStore.key)
         }
     }
 

@@ -13,16 +13,16 @@ suspend fun <T> safeApiCall(
     apiCall: suspend () -> Response<T>,
 ): Resource<T> {
     return withContext(dispatcher) {
-        var resource: Resource<T>
-        try {
+        val resource: Resource<T>
+        resource = try {
             val response = apiCall.invoke()
             if (response.isSuccessful) {
-                resource = successData(response)
+                successData(response)
             } else {
-                resource = errorDataAsync(response)
+                errorDataAsync(response)
             }
         } catch (t: Throwable) {
-            resource = exceptionDataAsync(t)
+            exceptionDataAsync(t)
         }
         resource
     }
@@ -46,13 +46,12 @@ fun exceptionData(error: Throwable): ErrorEntity = when {
 
 fun <T> errorData(response: Response<T>): ErrorEntity {
     val gson = Gson()
-    val errorEntity: ErrorEntity
     var errorBodyString = ""
     response.errorBody()?.let {
         errorBodyString = it.string()
     }
     //TODO: Process error codes
-    errorEntity = ErrorEntity(ErrorEntity.ERROR_UNKNOWN_EXCEPTION)
+    val errorEntity: ErrorEntity = ErrorEntity(ErrorEntity.ERROR_UNKNOWN_EXCEPTION)
     val errorBody = response.errorBody()?.string()
     if (errorBody != null) {
         try {
