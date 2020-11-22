@@ -52,7 +52,7 @@ class RetrofitApi @Inject constructor(
                 NewsTag.SPORT -> news.getSportNews()
                 NewsTag.ART -> news.getArtNews()
                 NewsTag.SCIENCE -> news.getScienceNews()
-                NewsTag.ECONOMY -> news.getRussiaNews()
+                NewsTag.ECONOMY -> news.getEconomyNews()
             }
             //news.getNewsWithTag(tag)
         }
