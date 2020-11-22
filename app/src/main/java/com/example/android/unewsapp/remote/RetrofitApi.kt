@@ -2,12 +2,11 @@ package com.example.android.unewsapp.remote
 
 import com.example.android.unewsapp.BuildConfig
 import com.example.android.unewsapp.core.NewsTag
-import com.example.android.unewsapp.models.News
+import com.example.android.unewsapp.models.ModelWrapper
 import com.example.android.unewsapp.models.NewsCount
 import com.example.android.unewsapp.models.NewsWrapper
 import com.example.android.unewsapp.remote.api.NewsApi
 import com.example.android.unewsapp.remote.api.CurrencyApi
-import com.example.android.unewsapp.utils.KeyStore
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -23,7 +22,7 @@ class RetrofitApi @Inject constructor(
 ) {
 
     private val URL = "http://62.113.118.217:8000/"
-    private val news by lazy {  getRetrofit().create(NewsApi::class.java)}
+    private val news by lazy {  getRetrofit(URL).create(NewsApi::class.java)}
     private val currency by lazy { getRetrofit("https://currate.ru/").create(CurrencyApi::class.java)}
 
     private fun getRetrofit(baseUrl: String): Retrofit {
@@ -73,15 +72,17 @@ class RetrofitApi @Inject constructor(
         }
     }
 
+    //Todo: Fill key in getValues()
     suspend fun getPairs(): Resource<ModelWrapper<List<String>>> {
         return responseWrapper {
-            currency.getPairs(key=KeyStore.key)
+            currency.getPairs(key = "")
         }
     }
 
+    //Todo: Fill key in getValues()
     suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String,String>>> {
         return responseWrapper {
-            currency.getValues(pairs = pairs.joinToString(separator=","), key = KeyStore.key)
+            currency.getValues(pairs = pairs.joinToString(separator=","), key = "")
         }
     }
 
