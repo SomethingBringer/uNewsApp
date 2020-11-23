@@ -1,10 +1,12 @@
 package com.example.android.unewsapp.remote
 
 import com.example.android.unewsapp.BuildConfig
-import com.example.android.unewsapp.models.*
-import com.example.android.unewsapp.remote.api.CurrencyApi
+import com.example.android.unewsapp.core.NewsTag
+import com.example.android.unewsapp.models.ModelWrapper
+import com.example.android.unewsapp.models.NewsCount
+import com.example.android.unewsapp.models.NewsWrapper
 import com.example.android.unewsapp.remote.api.NewsApi
-import com.example.android.unewsapp.utils.KeyStore
+import com.example.android.unewsapp.remote.api.CurrencyApi
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -19,7 +21,8 @@ class RetrofitApi @Inject constructor(
     private val gson:Gson
 ) {
 
-    private val news by lazy {  getRetrofit("").create(NewsApi::class.java)}
+    private val URL = "http://62.113.118.217:8000/"
+    private val news by lazy {  getRetrofit(URL).create(NewsApi::class.java)}
     private val currency by lazy { getRetrofit("https://currate.ru/").create(CurrencyApi::class.java)}
 
     private fun getRetrofit(baseUrl: String): Retrofit {
@@ -44,61 +47,43 @@ class RetrofitApi @Inject constructor(
             .build()
     }
 
-    suspend fun getNews(slug: String): Resource<ModelWrapper<List<News>>> {
-//        return responseWrapper {
-//            news.getNews(slug)
-//        }
-        val list = mutableListOf<News>()
-        list.add(News(1,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(2,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(3,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(4,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(11,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(13,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(15,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(16,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(19,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(10,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(100,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(111,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(122,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(133,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        return Resource.success(ModelWrapper(list))
+    suspend fun getNewsWithTag(tag: NewsTag): Resource<NewsWrapper> {
+        return responseWrapper {
+            when(tag){
+                NewsTag.RUSSIA -> news.getRussiaNews()
+                NewsTag.SPORT -> news.getSportNews()
+                NewsTag.ART -> news.getArtNews()
+                NewsTag.SCIENCE -> news.getScienceNews()
+                NewsTag.ECONOMY -> news.getEconomyNews()
+            }
+            //news.getNewsWithTag(tag)
+        }
     }
 
+    suspend fun getAllNews(): Resource<NewsWrapper> {
+        return responseWrapper {
+            news.getAllNews()
+        }
+    }
+
+    suspend fun getNewsCount(): Resource<NewsCount>{
+        return responseWrapper {
+            news.getNewsCount()
+        }
+    }
+
+    //Todo: Fill key in getValues()
     suspend fun getPairs(): Resource<ModelWrapper<List<String>>> {
         return responseWrapper {
-            currency.getPairs(key=KeyStore.key)
+            currency.getPairs(key = "")
         }
     }
 
+    //Todo: Fill key in getValues()
     suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String,String>>> {
         return responseWrapper {
-            currency.getValues(pairs = pairs.joinToString(separator=","), key = KeyStore.key)
+            currency.getValues(pairs = pairs.joinToString(separator=","), key = "")
         }
-    }
-
-
-    suspend fun searchNews(slug: String): Resource<ModelWrapper<List<News>>> {
-//        return responseWrapper {
-//            news.getNews(slug)
-//        }
-        val list = mutableListOf<News>()
-        list.add(News(1,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(2,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(3,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(4,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(11,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(13,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(15,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(16,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(19,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(10,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(100,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(111,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(122,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        list.add(News(133,"ЦСКА одержал третью подряд победу в чемпионате России","24.10.2020","summary","fulltext","РБК", listOf(slug)))
-        return Resource.success(ModelWrapper(list))
     }
 
     private suspend fun <T> responseWrapper(block: suspend () -> Response<T>): Resource<T> {

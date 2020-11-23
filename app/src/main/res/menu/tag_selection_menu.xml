@@ -9,7 +9,7 @@
         app:showAsAction="always" />
     <group
         android:id="@+id/tagSelectionPopular"
-        android:checkableBehavior="all">
+        android:checkableBehavior="single">
         <item
             android:id="@+id/corona"
             android:checkable="true"
@@ -30,17 +30,15 @@
         app:showAsAction="always" />
     <group
         android:id="@+id/tagSelectionCountries"
-        android:checkableBehavior="all">
+        android:checkableBehavior="single">
         <item
             android:id="@+id/russia"
             android:checkable="true"
-            android:title="@string/russia"
-           />
+            android:title="@string/russia" />
         <item
             android:id="@+id/usa"
             android:checkable="true"
-            android:title="@string/usa"
-            />
+            android:title="@string/usa" />
     </group>
 
 
