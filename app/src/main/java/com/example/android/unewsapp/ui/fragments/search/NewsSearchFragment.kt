@@ -7,6 +7,7 @@ import android.view.*
 import android.view.Menu.NONE
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
+import androidx.core.view.forEach
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
 import kotlinx.android.synthetic.main.fragment_news_feed.newsRecycler
 import kotlinx.android.synthetic.main.fragment_news_feed.progressBar
 import kotlinx.android.synthetic.main.fragment_news_search.*
+import java.util.*
 //import sun.security.jgss.GSSUtil.login
 import javax.inject.Inject
 
@@ -27,7 +29,17 @@ class NewsSearchFragment : Fragment() {
     lateinit var providerFactory: ViewModelProvider.Factory
     lateinit var viewModel: NewsSearchViewModel
     lateinit var newsAdapter: NewsAdapter
-
+    val timePopupMenu by lazy {
+        PopupMenu(requireContext(), btnSelectTime).apply {
+            inflate(R.menu.time_selection_menu)
+        }
+    }
+    val tagPopupMenu by lazy {
+        PopupMenu(requireContext(), btnSelectTags).apply {
+            inflate(R.menu.tag_selection_menu)
+            setOnMenuItemClickListener { item -> initTagMenuOnClickListener(item) }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +59,7 @@ class NewsSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
+        viewModel.cacheAllNews()
         etSearch.doAfterTextChanged { text ->
             if (text.isNullOrBlank()) {
                 setDefaultMode()
@@ -56,38 +69,8 @@ class NewsSearchFragment : Fragment() {
             }
         }
 
-        btnSelectTime.setOnClickListener {
-            val menu = PopupMenu(context, it)
-            menu.inflate(R.menu.time_selection_menu)
-            menu.show()
-        }
-
-        btnSelectTags.setOnClickListener {
-            val tagMenu = PopupMenu(context, it)
-            tagMenu.inflate(R.menu.tag_selection_menu)
-            //loadTags(tagMenu.menu)
-
-
-
-            //tagMenu.menu.findItem(R.id.menuPopular).isEnabled = false
-            //tagMenu.menu.findItem(R.id.menuCountries).isEnabled = false
-            
-            /*
-            tagMenu.setOnMenuItemClickListener {
-                it.isChecked = !it.isChecked
-                true
-            }
-
-             */
-
-            tagMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-                initTagMenuOnClickListener(item)
-                false
-            })
-            tagMenu.show()
-
-
-        }
+        btnSelectTime.setOnClickListener { timePopupMenu.show() }
+        btnSelectTags.setOnClickListener { tagPopupMenu.show() }
         ivCross.setOnClickListener { etSearch.text.clear() }
         observeLiveData()
     }
@@ -95,7 +78,7 @@ class NewsSearchFragment : Fragment() {
     private fun initAdapter() {
         newsAdapter = NewsAdapter { model ->
             findNavController().navigate(
-                R.id.action_newsFeedFragment_to_newsDetailsFragment,
+                R.id.newsDetailsFragment,
                 Bundle().apply {
                     putParcelable("KEY", model)
                     putString("title", model.title)
@@ -120,10 +103,12 @@ class NewsSearchFragment : Fragment() {
                 is NewsSearchViewModel.State.SHOW -> {
                     newsRecycler.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
+                    etSearch.isEnabled = true
                 }
                 is NewsSearchViewModel.State.LOADING -> {
                     newsRecycler.visibility = View.GONE
                     progressBar.visibility = View.VISIBLE
+                    etSearch.isEnabled = false
                 }
             }
         }
@@ -137,34 +122,15 @@ class NewsSearchFragment : Fragment() {
         ivCross.visibility = View.VISIBLE
     }
 
-    private fun initTagMenuOnClickListener(item: MenuItem){
+    private fun initTagMenuOnClickListener(item: MenuItem): Boolean{
+        tagPopupMenu.menu.forEach {
+            it.isChecked = false
+        }
         item.isChecked = !item.isChecked
-
-        // Do other stuff
-
-        // Keep the popup menu open
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
-        item.actionView = View(context)
-        item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                return false
-            }
-
-            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                return false
-            }
-        })
+        viewModel.searchNews(item.title.toString().toLowerCase(Locale.getDefault()))
+        return false
     }
 
-    private fun loadTags(menu : Menu){
-        val MENU_ADD = Menu.FIRST;
-        val MENU_LIST = Menu.FIRST + 1;
-
-        //val addstuff = onPrepareOptionsMenu(menu)
-        menu.clear()
-        //menu.add(0, MENU_ADD, NONE, R.string.politics).setCheckable(true)
-        //menu.add(0, MENU_LIST, NONE, R.string.popular).setCheckable(true)
-    }
 }
 
 

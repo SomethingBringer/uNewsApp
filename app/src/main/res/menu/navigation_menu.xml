@@ -3,8 +3,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@id/newsSearchFragment"
-            android:title="Search">
+            android:title="@string/fragment_search_label">
         </item>
+        <item
+            android:id="@id/converterFragment"
+            android:title="@string/converter"
+            />
     </group>
-
 </menu>

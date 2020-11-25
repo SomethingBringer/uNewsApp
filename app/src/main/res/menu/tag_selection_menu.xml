@@ -2,14 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/menuPopular"
-        android:title="@string/popular"
-
-        app:showAsAction="always" />
     <group
-        android:id="@+id/tagSelectionPopular"
-        android:checkableBehavior="all">
+        android:id="@+id/tagSelection"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/all"
+            android:checkable="true"
+            android:title="@string/all" />
+
+        <item
+            android:id="@+id/latest"
+            android:checkable="true"
+            android:title="@string/latest" />
+
         <item
             android:id="@+id/corona"
             android:checkable="true"
@@ -18,29 +24,20 @@
             android:id="@+id/politics"
             android:checkable="true"
             android:title="@string/politics" />
-        <item
-            android:id="@+id/health"
-            android:checkable="true"
-            android:title="@string/health" />
-    </group>
 
-    <item
-        android:id="@+id/menuCountries"
-        android:title="@string/countries"
-        app:showAsAction="always" />
-    <group
-        android:id="@+id/tagSelectionCountries"
-        android:checkableBehavior="all">
+        <item
+            android:id="@+id/business"
+            android:checkable="true"
+            android:title="@string/business" />
+
         <item
             android:id="@+id/russia"
             android:checkable="true"
-            android:title="@string/russia"
-           />
+            android:title="@string/russia" />
         <item
-            android:id="@+id/usa"
+            android:id="@+id/world"
             android:checkable="true"
-            android:title="@string/usa"
-            />
+            android:title="@string/world" />
     </group>
 
 

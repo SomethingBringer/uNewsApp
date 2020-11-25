@@ -1,18 +1,22 @@
 package com.example.android.unewsapp.ui.fragments.details
 
 import android.os.Bundle
+import android.text.format.DateFormat
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.models.News
 import kotlinx.android.synthetic.main.fragment_news_details.*
+import kotlinx.android.synthetic.main.item_news.view.*
 import java.lang.IllegalArgumentException
+import java.util.*
 
 class NewsDetailsFragment : Fragment() {
-
     private var model: News? = null
+    val dateFormatter by lazy {DateFormat.getDateFormat(requireContext())}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +32,12 @@ class NewsDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ivPhoto.visibility = View.GONE
         model?.let {
+            Glide.with(view.context).load(it.image).into(ivPhoto)
             tvSummary.text = it.fullText
+            val infoText = "${it.tag.capitalize()}: ${dateFormatter.format(Date.parse(it.date))}"
+
             val sourceText = "Источник: ${it.source}"
-            val infoText = "${it.keywords[0]}: ${it.date}"
             tvInfo.text = infoText
             tvSource.text = sourceText
         }

@@ -16,26 +16,41 @@ class NewsSearchViewModel @Inject constructor(
     private val api: RetrofitApi
 ) : ViewModel() {
 
+    private var allNews: List<News>? = null
 
     val newsLiveData = MutableLiveData<List<News>>()
     val errorLiveData = MutableLiveData<ErrorEntity>()
     val stateLiveData = MutableLiveData<State>()
 
-
-    fun searchNews(keyword: String) {
-        val slug = keyword
+    //Todo: Give a kick to backender for correct words&tag endpoint with queries
+    fun cacheAllNews(){
         viewModelScope.launch {
             stateLiveData.value = NewsSearchViewModel.State.LOADING
-            val response = api.searchNews(keyword)
+            allNews ?: run { allNews = loadNews() }
             stateLiveData.value = NewsSearchViewModel.State.SHOW
-            val data = response.data?.data
-            val error = response.errorEntity
-            data?.let { news ->
-                newsLiveData.value = news
-            }
-            error?.let { errorEntity ->
-                errorLiveData.value = errorEntity
-            }
+        }
+    }
+
+    suspend fun loadNews(): List<News> {
+        val response = api.getAllNews()
+        val data = response.data?.data
+        val error = response.errorEntity
+        data?.let { news ->
+            return news
+        }
+        error?.let { errorEntity ->
+            errorLiveData.value = errorEntity
+        }
+        return emptyList()
+    }
+
+
+    fun searchNews(keyword: String) {
+        viewModelScope.launch {
+            stateLiveData.value = NewsSearchViewModel.State.LOADING
+            val filteredNews = allNews?.filter { it.fullText.contains(keyword.toRegex()) && it.title.contains(keyword.toRegex()) } ?: emptyList()
+            stateLiveData.value = NewsSearchViewModel.State.SHOW
+            newsLiveData.value = filteredNews
         }
     }
 
