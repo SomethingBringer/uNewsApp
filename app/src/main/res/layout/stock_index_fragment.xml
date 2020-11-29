@@ -7,7 +7,9 @@
     tools:context=".ui.fragments.index.StockIndexFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvStockInfo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        tools:listitem="@layout/index_item"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

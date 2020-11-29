@@ -9,5 +9,9 @@
             android:id="@id/converterFragment"
             android:title="@string/converter"
             />
+        <item
+            android:id="@id/stockIndexFragment"
+            android:title="@string/stock"
+            />
     </group>
 </menu>

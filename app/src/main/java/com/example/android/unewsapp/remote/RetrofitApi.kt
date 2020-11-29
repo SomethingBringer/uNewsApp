@@ -1,12 +1,13 @@
 package com.example.android.unewsapp.remote
 
-import com.example.android.unewsapp.BuildConfig
 import com.example.android.unewsapp.core.NewsTag
 import com.example.android.unewsapp.models.ModelWrapper
 import com.example.android.unewsapp.models.NewsCount
 import com.example.android.unewsapp.models.NewsWrapper
+import com.example.android.unewsapp.models.StockWrapper
 import com.example.android.unewsapp.remote.api.NewsApi
 import com.example.android.unewsapp.remote.api.CurrencyApi
+import com.example.android.unewsapp.remote.api.StockApi
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -22,8 +23,10 @@ class RetrofitApi @Inject constructor(
 ) {
 
     private val URL = "http://62.113.118.217:8000/"
+    private val STOCK_TOKEN = "pk_ac91a73b395d4cf0beb315f91dd647ae"
     private val news by lazy {  getRetrofit(URL).create(NewsApi::class.java)}
     private val currency by lazy { getRetrofit("https://currate.ru/").create(CurrencyApi::class.java)}
+    private val stock by lazy { getRetrofit("https://cloud.iexapis.com/").create(StockApi::class.java)}
 
     private fun getRetrofit(baseUrl: String): Retrofit {
 
@@ -32,7 +35,7 @@ class RetrofitApi @Inject constructor(
             .readTimeout(TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
             .apply {
-                if (BuildConfig.DEBUG) {
+                if (true) {
                     val logger = HttpLoggingInterceptor()
                     logger.level = HttpLoggingInterceptor.Level.BODY
                     this.addNetworkInterceptor(logger)
@@ -83,6 +86,12 @@ class RetrofitApi @Inject constructor(
     suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String,String>>> {
         return responseWrapper {
             currency.getValues(pairs = pairs.joinToString(separator=","), key = "")
+        }
+    }
+
+    suspend fun getStockIndexes(collectionName: String = "Technology"): Resource<StockWrapper>{
+        return responseWrapper {
+            stock.getTodayIndexes(collectionName, STOCK_TOKEN)
         }
     }
 
