@@ -8,6 +8,7 @@ import com.example.android.unewsapp.models.StockWrapper
 import com.example.android.unewsapp.remote.api.NewsApi
 import com.example.android.unewsapp.remote.api.CurrencyApi
 import com.example.android.unewsapp.remote.api.StockApi
+import com.example.android.unewsapp.utils.KeyStore
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -78,14 +79,14 @@ class RetrofitApi @Inject constructor(
     //Todo: Fill key in getValues()
     suspend fun getPairs(): Resource<ModelWrapper<List<String>>> {
         return responseWrapper {
-            currency.getPairs(key = "")
+            currency.getPairs(key = KeyStore.key)
         }
     }
 
     //Todo: Fill key in getValues()
     suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String,String>>> {
         return responseWrapper {
-            currency.getValues(pairs = pairs.joinToString(separator=","), key = "")
+            currency.getValues(pairs = pairs.joinToString(separator=","), key = KeyStore.key)
         }
     }
 
