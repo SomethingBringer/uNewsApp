@@ -3,14 +3,13 @@ package com.example.android.unewsapp.ui.fragments.widget
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.utils.findSuitableParent
+import com.example.android.unewsapp.utils.findSuitableParent
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import kotlinx.android.synthetic.main.snackbar_with_button.view.*
-import kotlinx.android.synthetic.main.snackbar.view.*
+import kotlinx.android.synthetic.main.snackbar_with_button.view.*
 
 class CustomSnackbar(
     parent: ViewGroup,

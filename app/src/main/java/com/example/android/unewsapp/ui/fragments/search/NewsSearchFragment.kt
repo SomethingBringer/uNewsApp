@@ -3,6 +3,7 @@ package com.example.android.unewsapp.ui.fragments.search
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.Menu.NONE
 import android.widget.PopupMenu
@@ -15,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
+import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
+import kotlinx.android.synthetic.main.fragment_converter.*
 import kotlinx.android.synthetic.main.fragment_news_feed.newsRecycler
 import kotlinx.android.synthetic.main.fragment_news_feed.progressBar
 import kotlinx.android.synthetic.main.fragment_news_search.*
@@ -58,6 +61,7 @@ class NewsSearchFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initAdapter()
         viewModel.cacheAllNews()
         etSearch.doAfterTextChanged { text ->
@@ -72,6 +76,7 @@ class NewsSearchFragment : Fragment() {
         btnSelectTime.setOnClickListener { timePopupMenu.show() }
         btnSelectTags.setOnClickListener { tagPopupMenu.show() }
         ivCross.setOnClickListener { etSearch.text.clear() }
+        //CustomSnackbar.makeCustomSnackbar(view);
         observeLiveData()
     }
 
@@ -96,7 +101,11 @@ class NewsSearchFragment : Fragment() {
             }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
+            Log.e("ERROR_ENTITY", it.toString())
 
+            //val view = layoutInflater.inflate(R.layout.item_currency, llValues, false)
+            val view = layoutInflater.inflate(R.layout.snackbar_with_button, llValues, false)
+            CustomSnackbar.makeCustomSnackbar(view)
         }
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
             when (it) {
@@ -128,6 +137,19 @@ class NewsSearchFragment : Fragment() {
         }
         item.isChecked = !item.isChecked
         viewModel.searchNews(item.title.toString().toLowerCase(Locale.getDefault()))
+
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+        item.actionView = View(context)
+        item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                return false
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                return false
+            }
+        })
+
         return false
     }
 

@@ -12,6 +12,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
+import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import kotlinx.android.synthetic.main.fragment_converter.*
 import kotlinx.android.synthetic.main.item_currency.view.*
 import javax.inject.Inject
@@ -83,6 +84,10 @@ class ConverterFragment : Fragment() {
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
             Log.e("ERROR_ENTITY", it.toString())
+
+            //val view = layoutInflater.inflate(R.layout.item_currency, llValues, false)
+            val view = layoutInflater.inflate(R.layout.snackbar_with_button, llValues, false)
+            CustomSnackbar.makeCustomSnackbar(view)
         }
     }
 

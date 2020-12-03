@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.example.android.unewsapp.R
 import com.google.android.material.snackbar.ContentViewCallback
 import kotlinx.android.synthetic.main.snackbar_with_button.view.*
@@ -21,6 +22,9 @@ class CustomSnackbarView @JvmOverloads constructor(
     init {
         View.inflate(context, R.layout.snackbar_with_button, this)
         clipToPadding = false
+        snackbar_button.setOnClickListener{
+            this.isVisible = false
+        }
     }
 
     override fun animateContentIn(delay: Int, duration: Int) {

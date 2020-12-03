@@ -1,6 +1,7 @@
 package com.example.android.unewsapp.ui.fragments.feed
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,9 @@ import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.LOADING
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.SHOW
+import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.fragment_converter.*
 import kotlinx.android.synthetic.main.fragment_news_feed.*
 import javax.inject.Inject
 
@@ -69,7 +72,11 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
             }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
+            Log.e("ERROR_ENTITY", it.toString())
 
+            //val view = layoutInflater.inflate(R.layout.item_currency, llValues, false)
+            val view = layoutInflater.inflate(R.layout.snackbar_with_button, llValues, false)
+            CustomSnackbar.makeCustomSnackbar(view)
         }
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
             when (it) {
