@@ -7,7 +7,6 @@ import com.example.android.unewsapp.remote.ErrorEntity
 import com.example.android.unewsapp.remote.RetrofitApi
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 
 class ConverterViewModel @Inject constructor(private val api: RetrofitApi) : ViewModel() {
 
