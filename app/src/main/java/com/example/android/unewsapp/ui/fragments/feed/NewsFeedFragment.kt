@@ -42,10 +42,12 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         observeLiveData()
+        tabLayout.getTabAt(viewModel.selectedPosition)?.select()
         tabLayout.addOnTabSelectedListener(this)
-        viewModel.getNews(0)
 
-        //findNavController().navigate(R.id.action_newsFeedFragment_to_newsSearchFragment)
+        if(viewModel.newsLiveData.value==null) {
+            viewModel.getNews(viewModel.selectedPosition)
+        }
     }
 
     private fun initAdapter() {
