@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
-import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import kotlinx.android.synthetic.main.fragment_converter.*
 import kotlinx.android.synthetic.main.fragment_news_feed.newsRecycler
 import kotlinx.android.synthetic.main.fragment_news_feed.progressBar
@@ -102,10 +101,7 @@ class NewsSearchFragment : Fragment() {
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
             Log.e("ERROR_ENTITY", it.toString())
-
             //val view = layoutInflater.inflate(R.layout.item_currency, llValues, false)
-            val view = layoutInflater.inflate(R.layout.snackbar_with_button, llValues, false)
-            CustomSnackbar.makeCustomSnackbar(view)
         }
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
             when (it) {
@@ -132,11 +128,12 @@ class NewsSearchFragment : Fragment() {
     }
 
     private fun initTagMenuOnClickListener(item: MenuItem): Boolean{
+        val tagList : MutableList<String> = mutableListOf("");
         tagPopupMenu.menu.forEach {
-            it.isChecked = false
+            if (it.isChecked) tagList.add(it.title.toString().toLowerCase(Locale.getDefault()));
         }
         item.isChecked = !item.isChecked
-        viewModel.searchNews(item.title.toString().toLowerCase(Locale.getDefault()))
+        //viewModel.searchNews(item.title.toString().toLowerCase(Locale.getDefault()))
 
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
         item.actionView = View(context)
