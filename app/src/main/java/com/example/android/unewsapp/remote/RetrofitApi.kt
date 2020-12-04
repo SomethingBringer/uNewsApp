@@ -3,10 +3,12 @@ package com.example.android.unewsapp.remote
 import com.example.android.unewsapp.BuildConfig
 import com.example.android.unewsapp.core.NewsTag
 import com.example.android.unewsapp.models.ModelWrapper
+import com.example.android.unewsapp.models.News
 import com.example.android.unewsapp.models.NewsCount
 import com.example.android.unewsapp.models.NewsWrapper
 import com.example.android.unewsapp.remote.api.NewsApi
 import com.example.android.unewsapp.remote.api.CurrencyApi
+import com.example.android.unewsapp.utils.KeyStore
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -72,17 +74,21 @@ class RetrofitApi @Inject constructor(
         }
     }
 
-    //Todo: Fill key in getValues()
     suspend fun getPairs(): Resource<ModelWrapper<List<String>>> {
         return responseWrapper {
-            currency.getPairs(key = "")
+            currency.getPairs(key = KeyStore.key)
         }
     }
 
-    //Todo: Fill key in getValues()
     suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String,String>>> {
         return responseWrapper {
-            currency.getValues(pairs = pairs.joinToString(separator=","), key = "")
+            currency.getValues(pairs = pairs.joinToString(separator=","), key = KeyStore.key)
+        }
+    }
+
+    suspend fun searchNews(query: String, tags: List<String>? = null): Resource<NewsWrapper>{
+        return responseWrapper {
+            news.searchNews(query, tags)
         }
     }
 

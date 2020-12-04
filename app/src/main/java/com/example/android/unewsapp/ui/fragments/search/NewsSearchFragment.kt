@@ -59,13 +59,16 @@ class NewsSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-        viewModel.cacheAllNews()
         etSearch.doAfterTextChanged { text ->
             if (text.isNullOrBlank()) {
                 setDefaultMode()
             } else {
                 setSearchMode()
-                viewModel.searchNews(text.toString())
+                val s = text.toString()
+                if (viewModel.lastText != s && s.length >= 3) {
+                    viewModel.searchNews(text.toString())
+                }
+                viewModel.lastText = s
             }
         }
 

@@ -10,16 +10,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NewsApi {
-//Response<ModelWrapper<List<News>>>
-@GET("someUrl")
-suspend fun getNews(
-    @Query("slug") slug: String
-): Response<ModelWrapper<List<News>>>
-
-    @GET("someUrl")
-    suspend fun searchNews(
-        @Query("slug") slug: String
-    ): Response<ModelWrapper<List<News>>>
 
     @GET("api/russia")
     suspend fun getRussiaNews(): Response<NewsWrapper>
@@ -41,5 +31,11 @@ suspend fun getNews(
 
     @GET("api/count")
     suspend fun getNewsCount(): Response<NewsCount>
+
+    @GET("api/find")
+    suspend fun searchNews(
+        @Query("words") query: String,
+        @Query("tags") tags: List<String>?
+    ): Response<NewsWrapper>
 
 }
