@@ -10,6 +10,8 @@ import com.example.android.unewsapp.remote.RetrofitApi
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel
 import com.example.android.unewsapp.ui.fragments.search.NewsSearchViewModel.State.LOADING
 import com.example.android.unewsapp.ui.fragments.search.NewsSearchViewModel.State.SHOW
+import com.example.android.unewsapp.utils.nullIfBlank
+import com.example.android.unewsapp.utils.nullIfEmpty
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,6 +24,8 @@ class NewsSearchViewModel @Inject constructor(
     val newsLiveData = MutableLiveData<List<News>>()
     val errorLiveData = MutableLiveData<ErrorEntity>()
     val stateLiveData = MutableLiveData<State>()
+    val tagsLiveData = MutableLiveData<List<String>>()
+    val selectedTags = mutableListOf<String>()
 
     var lastText = ""
     private var timerLeft = 0
@@ -38,12 +42,22 @@ class NewsSearchViewModel @Inject constructor(
                 Log.d("timer", timerLeft.toString())
             }
             stateLiveData.value = LOADING
-            val resource = api.searchNews(query)
+            val resource =
+                api.searchNews(query.nullIfBlank(), selectedTags.nullIfEmpty() as List<String>)
             resource.data?.data.let {
                 newsLiveData.value = it
             }
             stateLiveData.value = SHOW
         }
+    }
+
+    fun getTags() = viewModelScope.launch {
+        stateLiveData.value = LOADING
+        val resource = api.getTags()
+        resource.data?.let {
+            tagsLiveData.value = it
+        }
+        stateLiveData.value = SHOW
     }
 
     sealed class State {

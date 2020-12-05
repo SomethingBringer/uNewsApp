@@ -34,8 +34,10 @@ interface NewsApi {
 
     @GET("api/find")
     suspend fun searchNews(
-        @Query("words") query: String,
+        @Query("words") query: String?,
         @Query("tags") tags: List<String>?
     ): Response<NewsWrapper>
 
+    @GET("api/gettags2")
+    suspend fun getTags(): Response<List<String>>
 }

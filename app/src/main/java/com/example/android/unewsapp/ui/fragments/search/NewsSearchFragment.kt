@@ -36,7 +36,6 @@ class NewsSearchFragment : Fragment() {
     }
     val tagPopupMenu by lazy {
         PopupMenu(requireContext(), btnSelectTags).apply {
-            inflate(R.menu.tag_selection_menu)
             setOnMenuItemClickListener { item -> initTagMenuOnClickListener(item) }
         }
     }
@@ -59,6 +58,7 @@ class NewsSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
+        viewModel.getTags()
         etSearch.doAfterTextChanged { text ->
             if (text.isNullOrBlank()) {
                 setDefaultMode()
@@ -115,6 +115,13 @@ class NewsSearchFragment : Fragment() {
                 }
             }
         }
+        viewModel.tagsLiveData.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                tagPopupMenu.menu.clear()
+                it.forEachIndexed { index, item -> tagPopupMenu.menu.add(1, index, index, item) }
+                tagPopupMenu.menu.setGroupCheckable(1, true, false)
+            }
+        }
     }
 
     private fun setDefaultMode() {
@@ -125,12 +132,24 @@ class NewsSearchFragment : Fragment() {
         ivCross.visibility = View.VISIBLE
     }
 
-    private fun initTagMenuOnClickListener(item: MenuItem): Boolean{
-        tagPopupMenu.menu.forEach {
-            it.isChecked = false
-        }
+    private fun initTagMenuOnClickListener(item: MenuItem): Boolean {
+        if (item.isChecked)
+            viewModel.selectedTags.remove(item.title.toString())
+        else
+            viewModel.selectedTags.add(item.title.toString())
         item.isChecked = !item.isChecked
-        viewModel.searchNews(item.title.toString().toLowerCase(Locale.getDefault()))
+        viewModel.searchNews(etSearch.text.toString())
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
+        item.actionView = View(context)
+        item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                return false
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                return false
+            }
+        })
         return false
     }
 
