@@ -21,13 +21,16 @@ class NewsFeedViewModel @Inject constructor(
     val errorLiveData = MutableLiveData<ErrorEntity>()
     val stateLiveData = MutableLiveData<State>()
 
+    private var mSelectedPosition = 0
+    val selectedPosition get() = mSelectedPosition
 
-    fun getNews(positon: Int) {
-        val tag = tags[positon]
+
+    fun getNews(position: Int) {
+        mSelectedPosition=position
+        val tag = tags[position]
         viewModelScope.launch {
             stateLiveData.value = LOADING
             val response = api.getNewsWithTag(tag)
-            stateLiveData.value = SHOW
             val data = response.data?.data
             val error = response.errorEntity
             data?.let { news ->
@@ -36,6 +39,7 @@ class NewsFeedViewModel @Inject constructor(
             error?.let { errorEntity ->
                 errorLiveData.value = errorEntity
             }
+            stateLiveData.value = SHOW
         }
     }
 
@@ -43,10 +47,6 @@ class NewsFeedViewModel @Inject constructor(
     sealed class State {
         object SHOW: State()
         object LOADING: State()
-    }
-
-    enum class FragmentState{
-        SHOW, LOADING
     }
 
 }

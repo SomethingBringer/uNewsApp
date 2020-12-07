@@ -1,25 +1,20 @@
 package com.example.android.unewsapp.ui.fragments.feed
 
 import android.os.Bundle
-import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.LOADING
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.SHOW
-import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_converter.*
 import kotlinx.android.synthetic.main.fragment_news_feed.*
 import javax.inject.Inject
-
 
 class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
@@ -45,27 +40,14 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initAdapter()
-
-        //val snack = CustomSnackbar.makeCustomSnackbar(view)
-        //snack.show()
         observeLiveData()
+        tabLayout.getTabAt(viewModel.selectedPosition)?.select()
         tabLayout.addOnTabSelectedListener(this)
-        viewModel.getNews(0)
 
-        //val wrapper = LinearLayout(activity)
-        //layoutInflater.inflate(R.layout.fragment_news_feed, wrapper, true);
-        ////val snack = CustomSnackbar.makeCustomSnackbar(view)
-
-        //val snack = Snackbar.make(view, "Snack with center gravity", Snackbar.LENGTH_SHORT)
-
-        //val snackText =  snack.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-        //snackText.textAlignment = View.TEXT_ALIGNMENT_CENTER
-        //snack.show()
-
-        //findNavController().navigate(R.id.action_newsFeedFragment_to_newsSearchFragment)
-        //CustomSnackbar.makeCustomSnackbar(view).show()
+        if(viewModel.newsLiveData.value==null) {
+            viewModel.getNews(viewModel.selectedPosition)
+        }
     }
 
     private fun initAdapter() {
@@ -89,7 +71,7 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
             }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
-            Log.e("ERROR_ENTITY", it.toString())
+
         }
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
             when (it) {

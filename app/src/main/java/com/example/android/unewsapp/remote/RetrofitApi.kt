@@ -3,10 +3,12 @@ package com.example.android.unewsapp.remote
 import com.example.android.unewsapp.BuildConfig
 import com.example.android.unewsapp.core.NewsTag
 import com.example.android.unewsapp.models.ModelWrapper
+import com.example.android.unewsapp.models.News
 import com.example.android.unewsapp.models.NewsCount
 import com.example.android.unewsapp.models.NewsWrapper
 import com.example.android.unewsapp.remote.api.NewsApi
 import com.example.android.unewsapp.remote.api.CurrencyApi
+import com.example.android.unewsapp.utils.KeyStore
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -18,12 +20,12 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class RetrofitApi @Inject constructor(
-    private val gson:Gson
+    private val gson: Gson
 ) {
 
     private val URL = "http://62.113.118.217:8000/"
-    private val news by lazy {  getRetrofit(URL).create(NewsApi::class.java)}
-    private val currency by lazy { getRetrofit("https://currate.ru/").create(CurrencyApi::class.java)}
+    private val news by lazy { getRetrofit(URL).create(NewsApi::class.java) }
+    private val currency by lazy { getRetrofit("https://currate.ru/").create(CurrencyApi::class.java) }
 
     private fun getRetrofit(baseUrl: String): Retrofit {
 
@@ -49,7 +51,7 @@ class RetrofitApi @Inject constructor(
 
     suspend fun getNewsWithTag(tag: NewsTag): Resource<NewsWrapper> {
         return responseWrapper {
-            when(tag){
+            when (tag) {
                 NewsTag.RUSSIA -> news.getRussiaNews()
                 NewsTag.SPORT -> news.getSportNews()
                 NewsTag.ART -> news.getArtNews()
@@ -66,24 +68,32 @@ class RetrofitApi @Inject constructor(
         }
     }
 
-    suspend fun getNewsCount(): Resource<NewsCount>{
+    suspend fun getNewsCount(): Resource<NewsCount> {
         return responseWrapper {
             news.getNewsCount()
         }
     }
 
-    //Todo: Fill key in getValues()
     suspend fun getPairs(): Resource<ModelWrapper<List<String>>> {
         return responseWrapper {
-            currency.getPairs(key = "")
+            currency.getPairs(key = KeyStore.key)
         }
     }
 
-    //Todo: Fill key in getValues()
-    suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String,String>>> {
+    suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String, String>>> {
         return responseWrapper {
-            currency.getValues(pairs = pairs.joinToString(separator=","), key = "")
+            currency.getValues(pairs = pairs.joinToString(separator = ","), key = KeyStore.key)
         }
+    }
+
+    suspend fun searchNews(query: String?, tags: List<String>? = null): Resource<NewsWrapper> {
+        return responseWrapper {
+            news.searchNews(query, tags)
+        }
+    }
+
+    suspend fun getTags(): Resource<List<String>> {
+        return responseWrapper { news.getTags() }
     }
 
     private suspend fun <T> responseWrapper(block: suspend () -> Response<T>): Resource<T> {

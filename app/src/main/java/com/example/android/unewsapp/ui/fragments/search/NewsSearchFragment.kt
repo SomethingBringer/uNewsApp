@@ -3,7 +3,6 @@ package com.example.android.unewsapp.ui.fragments.search
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.Menu.NONE
 import android.widget.PopupMenu
@@ -16,8 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
-import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
-import kotlinx.android.synthetic.main.fragment_converter.*
 import kotlinx.android.synthetic.main.fragment_news_feed.newsRecycler
 import kotlinx.android.synthetic.main.fragment_news_feed.progressBar
 import kotlinx.android.synthetic.main.fragment_news_search.*
@@ -39,7 +36,6 @@ class NewsSearchFragment : Fragment() {
     }
     val tagPopupMenu by lazy {
         PopupMenu(requireContext(), btnSelectTags).apply {
-            inflate(R.menu.tag_selection_menu)
             setOnMenuItemClickListener { item -> initTagMenuOnClickListener(item) }
         }
     }
@@ -61,25 +57,25 @@ class NewsSearchFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initAdapter()
-        viewModel.cacheAllNews()
+        viewModel.getTags()
         etSearch.doAfterTextChanged { text ->
             if (text.isNullOrBlank()) {
                 setDefaultMode()
             } else {
                 setSearchMode()
-                viewModel.searchNews(text.toString())
+                val s = text.toString()
+                if (viewModel.lastText != s && s.length >= 3) {
+                    viewModel.searchNews(text.toString())
+                }
+                viewModel.lastText = s
             }
         }
 
         btnSelectTime.setOnClickListener { timePopupMenu.show() }
-
         btnSelectTags.setOnClickListener { tagPopupMenu.show() }
         ivCross.setOnClickListener { etSearch.text.clear() }
-        //CustomSnackbar.makeCustomSnackbar(view);
         observeLiveData()
-        //CustomSnackbar.makeCustomSnackbar(view).show()
     }
 
     private fun initAdapter() {
@@ -103,12 +99,7 @@ class NewsSearchFragment : Fragment() {
             }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
-            Log.e("ERROR_ENTITY", it.toString())
-            //val  inflater: LayoutInflater
-            //inflater.inflate(R.layout.fragment_news_search, container, false)
 
-            //CustomSnackbar.makeCustomSnackbar(View.inflate()).show()
-            //val view = layoutInflater.inflate(R.layout.item_currency, llValues, false)
         }
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
             when (it) {
@@ -124,6 +115,13 @@ class NewsSearchFragment : Fragment() {
                 }
             }
         }
+        viewModel.tagsLiveData.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                tagPopupMenu.menu.clear()
+                it.forEachIndexed { index, item -> tagPopupMenu.menu.add(1, index, index, item) }
+                tagPopupMenu.menu.setGroupCheckable(1, true, false)
+            }
+        }
     }
 
     private fun setDefaultMode() {
@@ -134,14 +132,13 @@ class NewsSearchFragment : Fragment() {
         ivCross.visibility = View.VISIBLE
     }
 
-    private fun initTagMenuOnClickListener(item: MenuItem): Boolean{
-        val tagList : MutableList<String> = mutableListOf("");
-        tagPopupMenu.menu.forEach {
-            if (it.isChecked) tagList.add(it.title.toString().toLowerCase(Locale.getDefault()));
-        }
+    private fun initTagMenuOnClickListener(item: MenuItem): Boolean {
+        if (item.isChecked)
+            viewModel.selectedTags.remove(item.title.toString())
+        else
+            viewModel.selectedTags.add(item.title.toString())
         item.isChecked = !item.isChecked
-        //viewModel.searchNews(item.title.toString().toLowerCase(Locale.getDefault()))
-
+        viewModel.searchNews(etSearch.text.toString())
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW)
         item.actionView = View(context)
         item.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -153,7 +150,6 @@ class NewsSearchFragment : Fragment() {
                 return false
             }
         })
-
         return false
     }
 
