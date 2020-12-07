@@ -31,6 +31,17 @@ class NewsSearchViewModel @Inject constructor(
     private var timerLeft = 0
     private var timerJob: Job? = null
 
+    private var intervalStart: String = ""
+    val start get() = intervalStart
+    private var intervalEnd: String = ""
+    val end get() = intervalEnd
+
+    fun updateInterval(isStartUpdate: Boolean, value: String) {
+        if (isStartUpdate)
+            intervalStart = value
+        else intervalEnd = value
+    }
+
     fun searchNews(query: String) {
         timerJob?.cancel()
         timerLeft = 5
@@ -43,7 +54,12 @@ class NewsSearchViewModel @Inject constructor(
             }
             stateLiveData.value = LOADING
             val resource =
-                api.searchNews(query.nullIfBlank(), selectedTags.nullIfEmpty() as List<String>)
+                api.searchNews(
+                    query.nullIfBlank(),
+                    selectedTags.nullIfEmpty() as List<String>?,
+                    intervalStart.nullIfBlank(),
+                    intervalEnd.nullIfBlank()
+                )
             resource.data?.data.let {
                 newsLiveData.value = it
             }

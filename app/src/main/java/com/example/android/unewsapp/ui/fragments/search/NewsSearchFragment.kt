@@ -1,6 +1,7 @@
 package com.example.android.unewsapp.ui.fragments.search
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -14,10 +15,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
+import com.example.android.unewsapp.ui.fragments.details.NewsDetailsFragment
 import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
+import com.example.android.unewsapp.utils.toIsoDateString
 import kotlinx.android.synthetic.main.fragment_news_feed.newsRecycler
 import kotlinx.android.synthetic.main.fragment_news_feed.progressBar
 import kotlinx.android.synthetic.main.fragment_news_search.*
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 //import sun.security.jgss.GSSUtil.login
 import javax.inject.Inject
@@ -29,12 +34,8 @@ class NewsSearchFragment : Fragment() {
     lateinit var providerFactory: ViewModelProvider.Factory
     lateinit var viewModel: NewsSearchViewModel
     lateinit var newsAdapter: NewsAdapter
-    val timePopupMenu by lazy {
-        PopupMenu(requireContext(), btnSelectTime).apply {
-            inflate(R.menu.time_selection_menu)
-        }
-    }
-    val tagPopupMenu by lazy {
+
+    private val tagPopupMenu by lazy {
         PopupMenu(requireContext(), btnSelectTags).apply {
             setOnMenuItemClickListener { item -> initTagMenuOnClickListener(item) }
         }
@@ -59,6 +60,36 @@ class NewsSearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         viewModel.getTags()
+        initListeners()
+        observeLiveData()
+
+        if (viewModel.start.isNotBlank()) btnStartDate.text = viewModel.start
+        if (viewModel.end.isNotBlank()) btnEndDate.text = viewModel.end
+    }
+
+    private fun initAdapter() {
+        newsAdapter = NewsAdapter { model ->
+            findNavController().navigate(
+                R.id.newsDetailsFragment,
+                Bundle().apply {
+                    putParcelable(NewsDetailsFragment.MODEL_KEY, model)
+                    putString("title", model.title)
+                })
+        }
+        newsRecycler.apply {
+            adapter = newsAdapter
+        }
+    }
+
+    private fun initListeners() {
+        btnSelectTags.setOnClickListener { tagPopupMenu.show() }
+
+        ivCross.setOnClickListener { etSearch.text.clear() }
+
+        btnStartDate.setOnClickListener { initDatePikingDialog(true) }
+
+        btnEndDate.setOnClickListener { initDatePikingDialog(false) }
+
         etSearch.doAfterTextChanged { text ->
             if (text.isNullOrBlank()) {
                 setDefaultMode()
@@ -70,25 +101,6 @@ class NewsSearchFragment : Fragment() {
                 }
                 viewModel.lastText = s
             }
-        }
-
-        btnSelectTime.setOnClickListener { timePopupMenu.show() }
-        btnSelectTags.setOnClickListener { tagPopupMenu.show() }
-        ivCross.setOnClickListener { etSearch.text.clear() }
-        observeLiveData()
-    }
-
-    private fun initAdapter() {
-        newsAdapter = NewsAdapter { model ->
-            findNavController().navigate(
-                R.id.newsDetailsFragment,
-                Bundle().apply {
-                    putParcelable("KEY", model)
-                    putString("title", model.title)
-                })
-        }
-        newsRecycler.apply {
-            adapter = newsAdapter
         }
     }
 
@@ -151,6 +163,22 @@ class NewsSearchFragment : Fragment() {
             }
         })
         return false
+    }
+
+    private fun initDatePikingDialog(isStart: Boolean) {
+        val pickerDialog = DatePickerDialog(requireContext(),
+            { _, year, month, dayOfMonth ->
+                val pickedDate = LocalDateTime.of(year,month,dayOfMonth,0,0).toIsoDateString()
+                viewModel.updateInterval(isStart,pickedDate)
+                if (isStart)
+                    btnStartDate.text = pickedDate
+                else btnEndDate.text = pickedDate
+            },
+            LocalDateTime.now().atZone(ZoneId.systemDefault()).year,
+            LocalDateTime.now().atZone(ZoneId.systemDefault()).monthValue - 1,
+            LocalDateTime.now().atZone(ZoneId.systemDefault()).dayOfMonth
+        )
+        pickerDialog.show()
     }
 
 }
