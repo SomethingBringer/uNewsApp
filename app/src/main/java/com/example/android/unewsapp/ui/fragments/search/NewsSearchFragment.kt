@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
+import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import kotlinx.android.synthetic.main.fragment_converter.*
 import kotlinx.android.synthetic.main.fragment_news_feed.newsRecycler
 import kotlinx.android.synthetic.main.fragment_news_feed.progressBar
@@ -73,10 +74,12 @@ class NewsSearchFragment : Fragment() {
         }
 
         btnSelectTime.setOnClickListener { timePopupMenu.show() }
+
         btnSelectTags.setOnClickListener { tagPopupMenu.show() }
         ivCross.setOnClickListener { etSearch.text.clear() }
         //CustomSnackbar.makeCustomSnackbar(view);
         observeLiveData()
+        //CustomSnackbar.makeCustomSnackbar(view).show()
     }
 
     private fun initAdapter() {
@@ -101,6 +104,10 @@ class NewsSearchFragment : Fragment() {
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
             Log.e("ERROR_ENTITY", it.toString())
+            //val  inflater: LayoutInflater
+            //inflater.inflate(R.layout.fragment_news_search, container, false)
+
+            //CustomSnackbar.makeCustomSnackbar(View.inflate()).show()
             //val view = layoutInflater.inflate(R.layout.item_currency, llValues, false)
         }
         viewModel.stateLiveData.observe(viewLifecycleOwner) {

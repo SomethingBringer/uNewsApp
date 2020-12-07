@@ -9,7 +9,6 @@ import com.example.android.unewsapp.remote.RetrofitApi
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel
 import com.example.android.unewsapp.ui.fragments.search.NewsSearchViewModel.State.LOADING
 import com.example.android.unewsapp.ui.fragments.search.NewsSearchViewModel.State.SHOW
-import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

@@ -62,6 +62,8 @@ class ConverterFragment : Fragment() {
                 viewModel.coef = it.toString().toInt()
             viewModel.getValues(spinnerCurrency.selectedItem.toString())
         }
+
+        CustomSnackbar.makeCustomSnackbar(view).show()
     }
 
     private fun observeLiveData() {
@@ -86,8 +88,8 @@ class ConverterFragment : Fragment() {
             Log.e("ERROR_ENTITY", it.toString())
 
             //val view = layoutInflater.inflate(R.layout.item_currency, llValues, false)
-            val view = layoutInflater.inflate(R.layout.snackbar_with_button, llValues, false)
-            CustomSnackbar.makeCustomSnackbar(view)
+            //val view = layoutInflater.inflate(R.layout.snackbar_with_button, llValues, false)
+            //CustomSnackbar.makeCustomSnackbar(view)
         }
     }
 

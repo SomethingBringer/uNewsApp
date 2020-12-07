@@ -65,7 +65,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     // google
-    implementation 'com.google.android.material:material:1.2.1'
+
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // retrofit

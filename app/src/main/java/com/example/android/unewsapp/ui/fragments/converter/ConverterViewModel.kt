@@ -61,12 +61,8 @@ class ConverterViewModel @Inject constructor(private val api: RetrofitApi) : Vie
         }
 
         errorLiveData.observeForever {
-            if (it.text != null) {
-                val errorText = it.text
-                //CustomSnackbar.makeCustomSnackbar(this)
-            }
-
-
+            val errorText = it.text
+            //CustomSnackbar.makeCustomSnackbar(this)
         }
     }
 }
