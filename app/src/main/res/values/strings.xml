@@ -22,4 +22,8 @@
     <string name="countries">Страны</string>
     <string name="popular">Популярное</string>
     <string name="fragment_search_label">Поиск</string>
+    <string name="time">Time</string>
+    <string name="tags">Tags</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
 </resources>
