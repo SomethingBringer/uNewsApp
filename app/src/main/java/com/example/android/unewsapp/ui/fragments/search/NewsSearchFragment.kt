@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
+import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import kotlinx.android.synthetic.main.fragment_news_feed.newsRecycler
 import kotlinx.android.synthetic.main.fragment_news_feed.progressBar
 import kotlinx.android.synthetic.main.fragment_news_search.*
@@ -76,6 +77,7 @@ class NewsSearchFragment : Fragment() {
         btnSelectTags.setOnClickListener { tagPopupMenu.show() }
         ivCross.setOnClickListener { etSearch.text.clear() }
         observeLiveData()
+        CustomSnackbar.makeCustomSnackbar(view).show()
     }
 
     private fun initAdapter() {
