@@ -12,6 +12,7 @@ import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.LOADING
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.SHOW
+import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_news_feed.*
 import javax.inject.Inject
@@ -48,6 +49,7 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
         if(viewModel.newsLiveData.value==null) {
             viewModel.getNews(viewModel.selectedPosition)
         }
+        CustomSnackbar.makeCustomSnackbar(view).show()
     }
 
     private fun initAdapter() {
