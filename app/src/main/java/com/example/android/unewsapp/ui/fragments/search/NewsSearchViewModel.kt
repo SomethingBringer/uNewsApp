@@ -21,7 +21,7 @@ class NewsSearchViewModel @Inject constructor(
     private val api: RetrofitApi
 ) : ViewModel() {
 
-    val newsLiveData = MutableLiveData<List<News>>()
+    val newsLiveData = MutableLiveData<List<News>?>()
     val errorLiveData = MutableLiveData<ErrorEntity>()
     val stateLiveData = MutableLiveData<State>()
     val tagsLiveData = MutableLiveData<List<String>>()
@@ -30,6 +30,17 @@ class NewsSearchViewModel @Inject constructor(
     var lastText = ""
     private var timerLeft = 0
     private var timerJob: Job? = null
+
+    private var intervalStart: String = ""
+    val start get() = intervalStart
+    private var intervalEnd: String = ""
+    val end get() = intervalEnd
+
+    fun updateInterval(isStartUpdate: Boolean, value: String) {
+        if (isStartUpdate)
+            intervalStart = value
+        else intervalEnd = value
+    }
 
     fun searchNews(query: String) {
         timerJob?.cancel()
@@ -43,9 +54,17 @@ class NewsSearchViewModel @Inject constructor(
             }
             stateLiveData.value = LOADING
             val resource =
-                api.searchNews(query.nullIfBlank(), selectedTags.nullIfEmpty() as List<String>)
-            resource.data?.data.let {
-                newsLiveData.value = it
+                api.searchNews(
+                    query.nullIfBlank(),
+                    selectedTags.nullIfEmpty() as List<String>?,
+                    intervalStart.nullIfBlank(),
+                    intervalEnd.nullIfBlank()
+                )
+            val error = resource.errorEntity
+            if (resource.data != null) {
+                newsLiveData.value = resource.data.data
+            } else if(error!=null){
+                errorLiveData.value = error
             }
             stateLiveData.value = SHOW
         }
@@ -54,8 +73,11 @@ class NewsSearchViewModel @Inject constructor(
     fun getTags() = viewModelScope.launch {
         stateLiveData.value = LOADING
         val resource = api.getTags()
-        resource.data?.let {
-            tagsLiveData.value = it
+        val error = resource.errorEntity
+        if (resource.data != null) {
+            tagsLiveData.value = resource.data
+        } else if (error !=null) {
+            errorLiveData.value = error
         }
         stateLiveData.value = SHOW
     }
