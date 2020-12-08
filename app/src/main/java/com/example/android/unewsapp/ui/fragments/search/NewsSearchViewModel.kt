@@ -21,7 +21,7 @@ class NewsSearchViewModel @Inject constructor(
     private val api: RetrofitApi
 ) : ViewModel() {
 
-    val newsLiveData = MutableLiveData<List<News>>()
+    val newsLiveData = MutableLiveData<List<News>?>()
     val errorLiveData = MutableLiveData<ErrorEntity>()
     val stateLiveData = MutableLiveData<State>()
     val tagsLiveData = MutableLiveData<List<String>>()
@@ -60,8 +60,11 @@ class NewsSearchViewModel @Inject constructor(
                     intervalStart.nullIfBlank(),
                     intervalEnd.nullIfBlank()
                 )
-            resource.data?.data.let {
-                newsLiveData.value = it
+            val error = resource.errorEntity
+            if (resource.data != null) {
+                newsLiveData.value = resource.data.data
+            } else if(error!=null){
+                errorLiveData.value = error
             }
             stateLiveData.value = SHOW
         }
@@ -70,8 +73,11 @@ class NewsSearchViewModel @Inject constructor(
     fun getTags() = viewModelScope.launch {
         stateLiveData.value = LOADING
         val resource = api.getTags()
-        resource.data?.let {
-            tagsLiveData.value = it
+        val error = resource.errorEntity
+        if (resource.data != null) {
+            tagsLiveData.value = resource.data
+        } else if (error !=null) {
+            errorLiveData.value = error
         }
         stateLiveData.value = SHOW
     }
