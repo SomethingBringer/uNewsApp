@@ -58,19 +58,6 @@ class RetrofitApi @Inject constructor(
                 NewsTag.SCIENCE -> news.getScienceNews()
                 NewsTag.ECONOMY -> news.getEconomyNews()
             }
-            //news.getNewsWithTag(tag)
-        }
-    }
-
-    suspend fun getAllNews(): Resource<NewsWrapper> {
-        return responseWrapper {
-            news.getAllNews()
-        }
-    }
-
-    suspend fun getNewsCount(): Resource<NewsCount> {
-        return responseWrapper {
-            news.getNewsCount()
         }
     }
 
@@ -86,9 +73,14 @@ class RetrofitApi @Inject constructor(
         }
     }
 
-    suspend fun searchNews(query: String?, tags: List<String>? = null): Resource<NewsWrapper> {
+    suspend fun searchNews(
+        query: String?,
+        tags: List<String>? = null,
+        start: String? = null,
+        end: String? = null
+    ): Resource<NewsWrapper> {
         return responseWrapper {
-            news.searchNews(query, tags)
+            news.searchNews(query, tags, start, end)
         }
     }
 

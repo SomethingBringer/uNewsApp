@@ -20,7 +20,7 @@ class NewsDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        model = arguments?.getParcelable("KEY") ?: throw IllegalArgumentException()
+        model = arguments?.getParcelable(MODEL_KEY) ?: throw IllegalArgumentException()
     }
 
     override fun onCreateView(
@@ -35,13 +35,14 @@ class NewsDetailsFragment : Fragment() {
         model?.let {
             Glide.with(view.context).load(it.image).into(ivPhoto)
             tvSummary.text = it.fullText
-            val infoText = "${it.tag.capitalize()}: ${dateFormatter.format(Date.parse(it.date))}"
-
+            val infoText = "${it.tag.capitalize(Locale.getDefault())}: ${it.date.substring(0,10)}"
             val sourceText = "Источник: ${it.source}"
             tvInfo.text = infoText
             tvSource.text = sourceText
         }
     }
 
-
+    companion object {
+        const val MODEL_KEY = "MODEL_KEY"
+    }
 }

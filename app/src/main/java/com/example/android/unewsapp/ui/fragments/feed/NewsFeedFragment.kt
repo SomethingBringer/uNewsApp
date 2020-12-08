@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
+import com.example.android.unewsapp.ui.fragments.details.NewsDetailsFragment
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.LOADING
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.SHOW
 import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
@@ -57,7 +58,7 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
             findNavController().navigate(
                 R.id.action_newsFeedFragment_to_newsDetailsFragment,
                 Bundle().apply {
-                    putParcelable("KEY", model)
+                    putParcelable(NewsDetailsFragment.MODEL_KEY, model)
                     putString("title", model.title)
                 })
         }
