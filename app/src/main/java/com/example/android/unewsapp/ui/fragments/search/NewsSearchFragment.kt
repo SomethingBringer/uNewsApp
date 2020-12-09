@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
+import com.example.android.unewsapp.remote.ErrorEntity
 import com.example.android.unewsapp.ui.fragments.details.NewsDetailsFragment
 import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
 import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
@@ -110,6 +111,9 @@ class NewsSearchFragment : Fragment() {
         viewModel.newsLiveData.observe(viewLifecycleOwner) { newsList ->
             if (!newsList.isNullOrEmpty()) {
                 newsAdapter.submit(newsList)
+            }
+            else{
+                CustomSnackbar.makeCustomSnackbar(view, "ERROR_CODE_NO_CONTENT").show()
             }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {

@@ -73,6 +73,9 @@ class ConverterFragment : Fragment() {
                 llValues.removeAllViews()
                 it.forEach { item -> inflateItem(item.key, item.value, viewModel.coef) }
             }
+            else{
+                CustomSnackbar.makeCustomSnackbar(view, "ERROR_CODE_NO_CONTENT").show()
+            }
         }
         viewModel.currenciesLiveData.observe(viewLifecycleOwner) {
             spinnerCurrency.adapter = ArrayAdapter(

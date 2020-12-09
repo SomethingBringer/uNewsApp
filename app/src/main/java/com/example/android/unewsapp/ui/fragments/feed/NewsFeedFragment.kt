@@ -71,6 +71,9 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
             if (!newsList.isNullOrEmpty()) {
                 newsAdapter.submit(newsList)
             }
+            else{
+                CustomSnackbar.makeCustomSnackbar(view, "ERROR_CODE_NO_CONTENT").show()
+            }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
             CustomSnackbar.makeCustomSnackbar(view, it.text).show()
