@@ -43,14 +43,13 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-        observeLiveData()
+        observeLiveData(view)
         tabLayout.getTabAt(viewModel.selectedPosition)?.select()
         tabLayout.addOnTabSelectedListener(this)
 
         if(viewModel.newsLiveData.value==null) {
             viewModel.getNews(viewModel.selectedPosition)
         }
-        CustomSnackbar.makeCustomSnackbar(view).show()
     }
 
     private fun initAdapter() {
@@ -67,14 +66,14 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
         }
     }
 
-    private fun observeLiveData() {
+    private fun observeLiveData(view: View) {
         viewModel.newsLiveData.observe(viewLifecycleOwner) { newsList ->
             if (!newsList.isNullOrEmpty()) {
                 newsAdapter.submit(newsList)
             }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
-
+            CustomSnackbar.makeCustomSnackbar(view, it.text).show()
         }
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
             when (it) {

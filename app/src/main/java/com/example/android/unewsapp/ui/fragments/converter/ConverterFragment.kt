@@ -38,7 +38,7 @@ class ConverterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeLiveData()
+        observeLiveData(view)
         viewModel.getPairs()
 
         spinnerCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -62,11 +62,9 @@ class ConverterFragment : Fragment() {
                 viewModel.coef = it.toString().toInt()
             viewModel.getValues(spinnerCurrency.selectedItem.toString())
         }
-
-        CustomSnackbar.makeCustomSnackbar(view).show()
     }
 
-    private fun observeLiveData() {
+    private fun observeLiveData(view: View) {
         viewModel.pairsLiveData.observe(viewLifecycleOwner) {
 
         }
@@ -87,9 +85,7 @@ class ConverterFragment : Fragment() {
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
             Log.e("ERROR_ENTITY", it.toString())
 
-            //val view = layoutInflater.inflate(R.layout.item_currency, llValues, false)
-            //val view = layoutInflater.inflate(R.layout.snackbar_with_button, llValues, false)
-            //CustomSnackbar.makeCustomSnackbar(view)
+            CustomSnackbar.makeCustomSnackbar(view, it.text).show()
         }
     }
 

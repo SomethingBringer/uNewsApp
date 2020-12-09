@@ -17,6 +17,7 @@ import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.details.NewsDetailsFragment
 import com.example.android.unewsapp.ui.fragments.feed.NewsAdapter
+import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import com.example.android.unewsapp.utils.toIsoDateString
 import kotlinx.android.synthetic.main.fragment_news_feed.newsRecycler
 import kotlinx.android.synthetic.main.fragment_news_feed.progressBar
@@ -61,7 +62,7 @@ class NewsSearchFragment : Fragment() {
         initAdapter()
         viewModel.getTags()
         initListeners()
-        observeLiveData()
+        observeLiveData(view)
 
         if (viewModel.start.isNotBlank()) btnStartDate.text = viewModel.start
         if (viewModel.end.isNotBlank()) btnEndDate.text = viewModel.end
@@ -81,6 +82,7 @@ class NewsSearchFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initListeners() {
         btnSelectTags.setOnClickListener { tagPopupMenu.show() }
 
@@ -104,14 +106,14 @@ class NewsSearchFragment : Fragment() {
         }
     }
 
-    private fun observeLiveData() {
+    private fun observeLiveData(view: View) {
         viewModel.newsLiveData.observe(viewLifecycleOwner) { newsList ->
             if (!newsList.isNullOrEmpty()) {
                 newsAdapter.submit(newsList)
             }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
-
+            CustomSnackbar.makeCustomSnackbar(view, it.text).show()
         }
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
             when (it) {
@@ -165,6 +167,7 @@ class NewsSearchFragment : Fragment() {
         return false
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initDatePikingDialog(isStart: Boolean) {
         val pickerDialog = DatePickerDialog(requireContext(),
             { _, year, month, dayOfMonth ->

@@ -27,8 +27,7 @@ class CustomSnackbar(
 
     companion object{
 
-        fun makeCustomSnackbar(view: View): CustomSnackbar{
-
+        fun makeCustomSnackbar(view: View, errorText: String): CustomSnackbar{
             val parent = view.findSuitableParent() ?: throw IllegalArgumentException(
                 "No suitable parent found from the given view. Please provide a valid view."
             )
@@ -37,9 +36,18 @@ class CustomSnackbar(
                 parent,
                 false
             ) as CustomSnackbarView
-            //customView.ivFace.setImageResource(R.drawable.ic_launcher_foreground)
-            //customView.tvLabel.text = view.resources.getString(R.string.success)
-            //customView.tvMessage.text = view.resources.getString(R.string.custom_snack_message)
+
+            val error = when(errorText){
+                "ERROR_CODE_TIMEOUT" -> "Code timeout"
+                "ERROR_CODE_NO_CONTENT" -> "No content"
+                "ERROR_CODE_BAD_REQUEST" -> "Bad request"
+                "ERROR_CODE_SERVER_EXCEPTION" -> "Server exception"
+                "ERROR_UNKNOWN_EXCEPTION" -> "Unknown exception"
+                "ERROR_NO_INTERNET" -> "No connection"
+                else -> "Unknown error"
+            }
+            customView.snackbar_text.text = error
+            //customView.setBackgroundColor()
 
             return CustomSnackbar(parent, customView)
         }

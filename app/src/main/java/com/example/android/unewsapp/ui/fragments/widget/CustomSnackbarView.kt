@@ -18,7 +18,7 @@ class CustomSnackbarView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr), ContentViewCallback {
 
     init {
-        View.inflate(context, R.layout.snackbar_with_button, this)
+        View.inflate(context, R.layout.snackbar, this)
         clipToPadding = false
     }
 
