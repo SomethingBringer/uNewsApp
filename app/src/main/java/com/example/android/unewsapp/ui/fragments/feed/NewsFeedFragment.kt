@@ -13,6 +13,7 @@ import com.example.android.unewsapp.R
 import com.example.android.unewsapp.ui.fragments.details.NewsDetailsFragment
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.LOADING
 import com.example.android.unewsapp.ui.fragments.feed.NewsFeedViewModel.State.SHOW
+import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_news_feed.*
 import javax.inject.Inject
@@ -42,7 +43,7 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-        observeLiveData()
+        observeLiveData(view)
         tabLayout.getTabAt(viewModel.selectedPosition)?.select()
         tabLayout.addOnTabSelectedListener(this)
 
@@ -65,14 +66,17 @@ class NewsFeedFragment : Fragment(), TabLayout.OnTabSelectedListener {
         }
     }
 
-    private fun observeLiveData() {
+    private fun observeLiveData(view: View) {
         viewModel.newsLiveData.observe(viewLifecycleOwner) { newsList ->
             if (!newsList.isNullOrEmpty()) {
                 newsAdapter.submit(newsList)
             }
+            else{
+                CustomSnackbar.makeCustomSnackbar(view, "ERROR_CODE_NO_CONTENT").show()
+            }
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
-
+            CustomSnackbar.makeCustomSnackbar(view, it.text).show()
         }
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
             when (it) {

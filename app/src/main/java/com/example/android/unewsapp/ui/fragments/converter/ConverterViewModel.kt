@@ -59,5 +59,10 @@ class ConverterViewModel @Inject constructor(private val api: RetrofitApi) : Vie
                 currenciesLiveData.value = currencyList.distinct()
             }
         }
+
+        errorLiveData.observeForever {
+            val errorText = it.text
+            //CustomSnackbar.makeCustomSnackbar(this)
+        }
     }
 }

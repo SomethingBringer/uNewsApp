@@ -13,3 +13,5 @@
 .externalNativeBuild
 /app/src/main/java/com/example/android/unewsapp/utils/KeyStore.kt
 .cxx
+/.idea/
+/app/src/main/res/xml/network_security_config.xml
