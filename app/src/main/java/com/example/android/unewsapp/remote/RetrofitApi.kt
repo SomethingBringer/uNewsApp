@@ -2,6 +2,7 @@ package com.example.android.unewsapp.remote
 
 import com.example.android.unewsapp.core.NewsTag
 import com.example.android.unewsapp.models.ModelWrapper
+import com.example.android.unewsapp.models.News
 import com.example.android.unewsapp.models.NewsCount
 import com.example.android.unewsapp.models.NewsWrapper
 import com.example.android.unewsapp.models.StockWrapper
@@ -20,14 +21,15 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class RetrofitApi @Inject constructor(
-    private val gson:Gson
+    private val gson: Gson
 ) {
 
     private val URL = "http://62.113.118.217:8000/"
     private val STOCK_TOKEN = "pk_ac91a73b395d4cf0beb315f91dd647ae"
-    private val news by lazy {  getRetrofit(URL).create(NewsApi::class.java)}
-    private val currency by lazy { getRetrofit("https://currate.ru/").create(CurrencyApi::class.java)}
+  
     private val stock by lazy { getRetrofit("https://cloud.iexapis.com/").create(StockApi::class.java)}
+    private val news by lazy { getRetrofit(URL).create(NewsApi::class.java) }
+    private val currency by lazy { getRetrofit("https://currate.ru/").create(CurrencyApi::class.java) }
 
     private fun getRetrofit(baseUrl: String): Retrofit {
 
@@ -53,33 +55,36 @@ class RetrofitApi @Inject constructor(
 
     suspend fun getNewsWithTag(tag: NewsTag): Resource<NewsWrapper> {
         return responseWrapper {
-            when(tag){
+            when (tag) {
                 NewsTag.RUSSIA -> news.getRussiaNews()
                 NewsTag.SPORT -> news.getSportNews()
                 NewsTag.ART -> news.getArtNews()
                 NewsTag.SCIENCE -> news.getScienceNews()
                 NewsTag.ECONOMY -> news.getEconomyNews()
             }
-            //news.getNewsWithTag(tag)
         }
     }
 
-    suspend fun getAllNews(): Resource<NewsWrapper> {
-        return responseWrapper {
-            news.getAllNews()
-        }
-    }
-
-    suspend fun getNewsCount(): Resource<NewsCount>{
-        return responseWrapper {
-            news.getNewsCount()
-        }
-    }
-
-    //Todo: Fill key in getValues()
     suspend fun getPairs(): Resource<ModelWrapper<List<String>>> {
         return responseWrapper {
             currency.getPairs(key = KeyStore.key)
+        }
+    }
+
+    suspend fun getValues(pairs: List<String>): Resource<ModelWrapper<Map<String, String>>> {
+        return responseWrapper {
+            currency.getValues(pairs = pairs.joinToString(separator = ","), key = KeyStore.key)
+        }
+    }
+
+    suspend fun searchNews(
+        query: String?,
+        tags: List<String>? = null,
+        start: String? = null,
+        end: String? = null
+    ): Resource<NewsWrapper> {
+        return responseWrapper {
+             news.searchNews(query, tags, start, end)
         }
     }
 
@@ -94,6 +99,9 @@ class RetrofitApi @Inject constructor(
         return responseWrapper {
             stock.getTodayIndexes(collectionName, STOCK_TOKEN)
         }
+
+    suspend fun getTags(): Resource<List<String>> {
+        return responseWrapper { news.getTags() }
     }
 
     private suspend fun <T> responseWrapper(block: suspend () -> Response<T>): Resource<T> {

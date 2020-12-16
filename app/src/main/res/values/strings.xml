@@ -16,11 +16,17 @@
     <string name="news_for_the_week">За последнюю неделю</string>
     <string name="news_for_the_month">За последний месяц</string>
     <string name="none">Без ограничений</string>
-    <string name="usa">США</string>
+    <string name="business">Бизнесс</string>
     <string name="corona">Коронавирус</string>
     <string name="politics">Политика</string>
     <string name="health">Здоровье</string>
     <string name="countries">Страны</string>
-    <string name="popular">Популярное</string>
+    <string name="latest">Последнее</string>
+    <string name="world">Мир</string>
+    <string name="all">Все</string>
     <string name="fragment_search_label">Поиск</string>
+    <string name="time">Time</string>
+    <string name="tags">Tags</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
 </resources>

@@ -12,6 +12,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.unewsapp.MyApplication
 import com.example.android.unewsapp.R
+import com.example.android.unewsapp.ui.fragments.widget.CustomSnackbar
 import kotlinx.android.synthetic.main.fragment_converter.*
 import kotlinx.android.synthetic.main.item_currency.view.*
 import javax.inject.Inject
@@ -37,7 +38,7 @@ class ConverterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeLiveData()
+        observeLiveData(view)
         viewModel.getPairs()
 
         spinnerCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -63,7 +64,7 @@ class ConverterFragment : Fragment() {
         }
     }
 
-    private fun observeLiveData() {
+    private fun observeLiveData(view: View) {
         viewModel.pairsLiveData.observe(viewLifecycleOwner) {
 
         }
@@ -71,6 +72,9 @@ class ConverterFragment : Fragment() {
             if (!it.isNullOrEmpty()) {
                 llValues.removeAllViews()
                 it.forEach { item -> inflateItem(item.key, item.value, viewModel.coef) }
+            }
+            else{
+                CustomSnackbar.makeCustomSnackbar(view, "ERROR_CODE_NO_CONTENT").show()
             }
         }
         viewModel.currenciesLiveData.observe(viewLifecycleOwner) {
@@ -83,6 +87,8 @@ class ConverterFragment : Fragment() {
         }
         viewModel.errorLiveData.observe(viewLifecycleOwner) {
             Log.e("ERROR_ENTITY", it.toString())
+
+            CustomSnackbar.makeCustomSnackbar(view, it.text).show()
         }
     }
 
